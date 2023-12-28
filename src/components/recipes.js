@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MasonryList from '@react-native-seoul/masonry-list';
+import { mealData } from '../constants';
 import Loading from './loading';
 import { CachedImage } from '../helpers/image';
 import { useNavigation } from '@react-navigation/native';
@@ -29,12 +30,19 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginBottom: hp(1),
     backgroundColor: 'black',
+    borderWidth: 2, 
+    borderColor: 'rgba(255, 193, 7, 0.4)', 
   },
   recipeName: {
     fontSize: hp(1.5),
     fontWeight: '600',
     marginLeft: wp(2),
     color: '#666666',
+    textAlign: 'center', 
+  },
+  
+  recipeCardWrapper: {
+    marginHorizontal: wp(1), 
   },
 });
 
@@ -42,10 +50,13 @@ const Recipes = ({ meals }) => {
   const navigation = useNavigation();
 
   // Function to render each RecipeCard
-  const renderRecipeCard = ({ item, index }) => (
-    <RecipeCard item={item} index={index} navigation={navigation} />
+  const renderRecipeCard = ({ item }) => (
+    <View style={styles.recipeCardWrapper}>
+      <RecipeCard item={item} navigation={navigation} />
+    </View>
   );
 
+  
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Recipes</Text>
@@ -63,7 +74,8 @@ const Recipes = ({ meals }) => {
 };
 
 // RecipeCard component
-const RecipeCard = ({ item, index, navigation }) => {
+const RecipeCard = ({ item, navigation }) => {
+
   return (
     <Pressable
       style={styles.recipeCardContainer}
@@ -76,5 +88,6 @@ const RecipeCard = ({ item, index, navigation }) => {
     </Pressable>
   );
 };
+
 
 export default Recipes;

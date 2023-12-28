@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Image, TextInput, StyleSheet } from 'react-nati
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import { MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import Categories from '../components/categories';
 import axios from 'axios';
 import Recipes from '../components/recipes';
@@ -11,6 +11,8 @@ const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = useState('Beef');
   const [categories, setCategories] = useState([]);
   const [meals, setMeals] = useState([]);
+  const [allMeals, setAllMeals] = useState([]);
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     getCategories();
@@ -39,12 +41,20 @@ const HomeScreen = () => {
       const response = await axios.get(`https://themealdb.com/api/json/v1/1/filter.php?c=${category}`);
       if (response && response.data) {
         setMeals(response.data.meals);
+        setAllMeals(response.data.meals);
       }
     } catch (err) {
       console.log('error: ', err.message);
     }
   };
 
+  const filterRecipes = (text) => {
+    const filteredRecipes = allMeals.filter((meal) =>
+      meal.strMeal.toLowerCase().includes(text.toLowerCase())
+    );
+    setMeals(filteredRecipes);
+    setInput(text);
+  }
 
   return (
     <View style={styles.container}>
@@ -53,35 +63,40 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollView}
       >
-        {/* avatar and bell icon */}
-        <View style={styles.avatarContainer}>
-          <Image
-            source={require('../../assets/images/avatar.png')}
-            style={{ height: hp(5), width: hp(5.5) }}
-          />
-          <BellIcon size={hp(4)} color="gray" />
-        </View>
-
         {/* greetings and punchline */}
         <View style={styles.greetingsContainer}>
-          <Text style={{ fontSize: hp(1.7) }} >Hello, Noman!</Text>
-          <View>
-            <Text style={{ fontSize: hp(3.8), fontWeight: 'bold' }}>
-              Make your own food,
-            </Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.greetingsText}>
+                Foody, Make With Your Mood
+              </Text>
+            </View>
+            <View style={styles.avatarContainer}>
+              {/* Add your avatar content here */}
+            </View>
           </View>
-          <Text style={{ fontSize: hp(3.8), fontWeight: 'bold' }}>
-            stay at <Text style={{ color: 'orange' }}>home</Text>
-          </Text>
-        </View>
+
+
 
         {/* search bar */}
         <View style={styles.searchBarContainer}>
-          <TextInput
+        <TextInput
+            value={input}
+            onChangeText={(text) => filterRecipes(text)}
             placeholder='Search any recipe'
             placeholderTextColor={'gray'}
-            style={{ fontSize: hp(1.7), flex: 1, marginBottom: 1, paddingLeft: 3 }}
-          />
+            style={{
+              fontSize: hp(1.7),
+              flex: 1,
+              marginBottom: 0,
+              paddingLeft: 2,
+              paddingVertical: 5,
+              paddingHorizontal: 10,
+              backgroundColor: 'white',
+              borderRadius: 30,
+            }}
+            
+/>
+
           <View
             style={{
               backgroundColor: 'white',
@@ -120,29 +135,43 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     paddingBottom: 50,
-    paddingTop: hp(14),
-  },
-  avatarContainer: {
-    marginHorizontal: 4,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 2,
+    paddingTop: hp(0),
   },
   greetingsContainer: {
     marginHorizontal: 4,
     marginBottom: 2,
   },
+  textContainer: {
+    backgroundColor: '#FFA500',
+    padding: 10,
+    borderRadius: 15,
+    marginHorizontal: -8, 
+    paddingTop: hp(5),
+  },
+  
+  greetingsText: {
+    fontSize: hp(3.8),
+    fontWeight: 'bold',
+    color: 'white',
+  },
   searchBarContainer: {
-    marginHorizontal: 4,
+    marginHorizontal: 9,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    padding: 6,
+    backgroundColor: 'rgba(255, 193, 7, 0.4)',
+    padding: 8,
+  },
+  avatarContainer: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   categoriesContainer: {},
   recipesContainer: {},
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
 });
 
 export default HomeScreen;

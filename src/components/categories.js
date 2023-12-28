@@ -34,17 +34,20 @@ const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
 
 const styles = StyleSheet.create({
   scrollViewContent: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
+    marginTop: 12,
   },
   categoryButton: {
     flex: 1,
     alignItems: 'center',
-    marginHorizontal: 4,
+    marginHorizontal: 9,
   },
   buttonContainer: {
-    borderRadius: hp(6) / 2,
-    padding: 6,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    borderRadius: hp(2) / 2,
+    padding: 8,
+    backgroundColor: 'orange',
+    paddingBottom: 14,
+    paddingTop: 10,
   },
   activeButton: {
     backgroundColor: 'rgba(255, 193, 7, 0.4)',
