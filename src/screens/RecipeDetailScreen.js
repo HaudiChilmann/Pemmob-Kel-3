@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   videoContainer: {
-    marginBottom: hp(4),
+    marginBottom: hp(0),
   },
   videoTitle: {
     fontSize: hp(2.5),
